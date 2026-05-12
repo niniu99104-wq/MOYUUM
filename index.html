@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOYUUM 韓國 私密社團開團 🇰🇷</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF6F1;
+    --warm-white: #FFFDF9;
+    --blush: #E8C4B8;
+    --dusty-rose: #C9897A;
+    --terracotta: #A85C4A;
+    --dark: #2A1F1A;
+    --mid: #6B4F44;
+    --light-text: #9A7B72;
+    --border: #E2D0C8;
+    --tag-bg: #F5EAE5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Serif TC', serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--dark);
+    color: var(--cream);
+    padding: 36px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 18px,
+      rgba(232,196,184,.07) 18px,
+      rgba(232,196,184,.07) 19px
+    );
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--terracotta);
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: .15em;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+  header h1 {
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 700;
+    letter-spacing: .04em;
+    line-height: 1.3;
+    position: relative;
+  }
+  header p {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--blush);
+    position: relative;
+    letter-spacing: .03em;
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--light-text);
+    pointer-events: none;
+  }
+  #searchInput {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Noto Serif TC', serif;
+    background: var(--cream);
+    outline: none;
+    transition: border-color .2s;
+  }
+  #searchInput:focus { border-color: var(--dusty-rose); }
+
+  .cat-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .cat-btn {
+    padding: 6px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'Noto Serif TC', serif;
+    cursor: pointer;
+    background: var(--cream);
+    color: var(--mid);
+    transition: all .18s;
+    white-space: nowrap;
+  }
+  .cat-btn:hover { border-color: var(--dusty-rose); color: var(--dusty-rose); }
+  .cat-btn.active {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: #fff;
+  }
+
+  /* ── CART FLOAT ── */
+  #cartBtn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 200;
+    background: var(--terracotta);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 22px;
+    font-size: 14px;
+    font-family: 'Noto Serif TC', serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(168,92,74,.4);
+    transition: transform .2s, box-shadow .2s;
+  }
+  #cartBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(168,92,74,.5); }
+  #cartCount {
+    background: #fff;
+    color: var(--terracotta);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── PRODUCT LIST ── */
+  .main-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 16px 120px;
+  }
+
+  .cat-section { margin-bottom: 10px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0 10px;
+    border-bottom: 2px solid var(--terracotta);
+    margin-bottom: 6px;
+  }
+  .cat-icon { font-size: 18px; }
+  .cat-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--terracotta);
+    letter-spacing: .06em;
+  }
+  .cat-count {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--light-text);
+    background: var(--tag-bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .product-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+    border-radius: 4px;
+  }
+  .product-row:hover { background: var(--tag-bg); }
+
+  .row-no {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--light-text);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .row-name {
+    flex: 1;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--dark);
+  }
+  .row-link {
+    font-size: 11px;
+    color: var(--dusty-rose);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    border: 1px solid var(--blush);
+    border-radius: 4px;
+    white-space: nowrap;
+    transition: all .15s;
+    flex-shrink: 0;
+  }
+  .row-link:hover { background: var(--dusty-rose); color: #fff; border-color: var(--dusty-rose); }
+  .row-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--terracotta);
+    white-space: nowrap;
+    width: 66px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .row-add {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--dusty-rose);
+    background: transparent;
+    color: var(--dusty-rose);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+    line-height: 1;
+  }
+  .row-add:hover { background: var(--dusty-rose); color: #fff; }
+  .row-add.in-cart {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    color: #fff;
+    font-size: 14px;
+  }
+
+  /* ── CART MODAL ── */
+  #cartOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(42,31,26,.5);
+    z-index: 300;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  #cartOverlay.open { display: flex; }
+  #cartModal {
+    background: var(--warm-white);
+    width: 100%;
+    max-width: 680px;
+    max-height: 80vh;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 -8px 40px rgba(0,0,0,.2);
+  }
+  .cart-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart-header h2 { font-size: 16px; color: var(--dark); }
+  #closeCart {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--mid);
+    line-height: 1;
+  }
+  .cart-body { overflow-y: auto; flex: 1; padding: 4px 0; }
+  .cart-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--light-text);
+    font-size: 14px;
+  }
+  .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-item-name { flex: 1; font-size: 13px; line-height: 1.4; }
+  .cart-qty-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .qty-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mid);
+    transition: border-color .15s;
+    line-height: 1;
+  }
+  .qty-btn:hover { border-color: var(--dusty-rose); color: var(--dusty-rose); }
+  .qty-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    min-width: 20px;
+    text-align: center;
+  }
+  .cart-item-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--terracotta);
+    white-space: nowrap;
+    min-width: 60px;
+    text-align: right;
+  }
+  .cart-del {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color .15s;
+  }
+  .cart-del:hover { color: var(--dusty-rose); }
+
+  .cart-footer {
+    padding: 14px 20px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--warm-white);
+  }
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .cart-total span:last-child {
+    font-family: 'DM Mono', monospace;
+    color: var(--terracotta);
+  }
+  #copyOrderBtn {
+    width: 100%;
+    background: var(--terracotta);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 14px;
+    font-family: 'Noto Serif TC', serif;
+    cursor: pointer;
+    letter-spacing: .04em;
+    transition: background .2s;
+  }
+  #copyOrderBtn:hover { background: var(--dark); }
+
+  /* ── ORDER TEXT MODAL ── */
+  #orderOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(42,31,26,.6);
+    z-index: 400;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #orderOverlay.open { display: flex; }
+  #orderModal {
+    background: var(--warm-white);
+    width: 100%;
+    max-width: 560px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 48px rgba(0,0,0,.25);
+  }
+  .order-header {
+    padding: 16px 20px;
+    background: var(--dark);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  #closeOrder { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+  #orderText {
+    width: 100%;
+    height: 260px;
+    padding: 16px;
+    border: none;
+    background: #FAF6F1;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: var(--dark);
+    resize: none;
+    outline: none;
+    line-height: 1.7;
+  }
+  .order-actions {
+    padding: 14px 20px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .btn-copy, .btn-close2 {
+    flex: 1;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Noto Serif TC', serif;
+    cursor: pointer;
+    border: 1.5px solid var(--terracotta);
+    transition: all .2s;
+  }
+  .btn-copy { background: var(--terracotta); color: #fff; }
+  .btn-copy:hover { background: var(--dark); border-color: var(--dark); }
+  .btn-close2 { background: transparent; color: var(--terracotta); }
+  .btn-close2:hover { background: var(--tag-bg); }
+
+  .no-results {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--light-text);
+    font-size: 14px;
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 88px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--dark);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    white-space: nowrap;
+    z-index: 500;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 500px) {
+    .row-link { display: none; }
+    .product-row { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">🇰🇷 MOYUUM × 私密社團</div>
+  <h1>韓國精品育兒好物<br>限時開團</h1>
+  <p>共 221 項商品 · 點擊「+」加入清單 · 最後複製訂單傳給團主</p>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" type="text" placeholder="搜尋商品名稱…">
+  </div>
+  <div class="cat-filters" id="catFilters"></div>
+</div>
+
+<div class="main-wrap" id="mainWrap"></div>
+
+<button id="cartBtn">
+  🛍 我的清單
+  <span id="cartCount">0</span>
+</button>
+
+<!-- Cart Modal -->
+<div id="cartOverlay">
+  <div id="cartModal">
+    <div class="cart-header">
+      <h2>📋 訂購清單</h2>
+      <button id="closeCart">×</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>合計金額</span>
+        <span id="cartTotalAmt">NT$0</span>
+      </div>
+      <button id="copyOrderBtn">✉ 產生訂單文字</button>
+    </div>
+  </div>
+</div>
+
+<!-- Order Text Modal -->
+<div id="orderOverlay">
+  <div id="orderModal">
+    <div class="order-header">
+      <span>📋 訂單內容</span>
+      <button id="closeOrder">×</button>
+    </div>
+    <textarea id="orderText" readonly></textarea>
+    <div class="order-actions">
+      <button class="btn-copy" id="doCopy">複製訂單</button>
+      <button class="btn-close2" id="closeOrder2">關閉</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const PRODUCTS = [{"no":1,"cat":"馬年新生兒限定禮盒","name":"MOYUUM 逐夢之旅‧馬年新生兒限定禮盒(紅)","price":1566,"url":"https://www.yodee.com.tw/categories/moyuum-%E9%9F%93%E5%9C%8B-%E5%AC%B0%E5%B9%BC%E5%85%92%E7%94%A8%E5%93%81"},{"no":2,"cat":"馬年新生兒限定禮盒","name":"MOYUUM 逐夢之旅‧馬年新生兒限定禮盒(藍)","price":1566,"url":"https://www.yodee.com.tw/categories/moyuum-%E9%9F%93%E5%9C%8B-%E5%AC%B0%E5%B9%BC%E5%85%92%E7%94%A8%E5%93%81"},{"no":3,"cat":"餐具系列","name":"MOYUUM 韓國 彎曲餵食雙匙組-奶油黃","price":334,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%BD%8E%E6%9B%B2%E9%A4%B5%E9%A3%9F%E9%9B%99%E5%8C%99%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":4,"cat":"餐具系列","name":"MOYUUM 韓國 彎曲餵食雙匙組-蜜桃粉","price":334,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%BD%8E%E6%9B%B2%E9%A4%B5%E9%A3%9F%E9%9B%99%E5%8C%99%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":5,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(12格)-奶油黃","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":6,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(12格)-南瓜橘","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":7,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(12格)-質感灰","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":8,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(4格)-奶油黃","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":9,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(4格)-南瓜橘","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":10,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(4格)-質感灰","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":11,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(6格)-奶油黃","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":12,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(6格)-南瓜橘","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":13,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠副食品分裝盒(6格)-質感灰","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":14,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠寬口立體圍兜-奶油黃","price":519,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%AF%AC%E5%8F%A3%E7%AB%8B%E9%AB%94%E5%9C%8D%E5%85%9C-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":15,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠寬口立體圍兜-珊瑚粉","price":519,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%AF%AC%E5%8F%A3%E7%AB%8B%E9%AB%94%E5%9C%8D%E5%85%9C-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":16,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠寬口立體圍兜-甜蜜派對","price":519,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%AF%AC%E5%8F%A3%E7%AB%8B%E9%AB%94%E5%9C%8D%E5%85%9C-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":17,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠寬口立體圍兜-甜蜜莓果","price":519,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%AF%AC%E5%8F%A3%E7%AB%8B%E9%AB%94%E5%9C%8D%E5%85%9C-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":18,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠寬口立體圍兜-蜜桃橘","price":519,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%AF%AC%E5%8F%A3%E7%AB%8B%E9%AB%94%E5%9C%8D%E5%85%9C-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":19,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠寬口立體圍兜-橄欖綠","price":519,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%AF%AC%E5%8F%A3%E7%AB%8B%E9%AB%94%E5%9C%8D%E5%85%9C-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":20,"cat":"餐具系列","name":"MOYUUM 韓國 TRITAN多功能食品儲存罐3入-奶油黃(240ml)","price":396,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-tritan%E5%A4%9A%E5%8A%9F%E8%83%BD%E9%A3%9F%E5%93%81%E5%84%B2%E5%AD%98%E7%BD%903%E5%85%A5-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":21,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(12格)-奶油杏","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":22,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(12格)-南瓜橘","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":23,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(12格)-開心果綠","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":24,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(12格)-蜜橙黃","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":25,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(6格)-芋頭紫","price":378,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":26,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(6格)-南瓜橘","price":378,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":27,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(6格)-香草白","price":378,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":28,"cat":"餐具系列","name":"MOYUUM 韓國 雙層密封白金矽膠副食品分裝盒(6格)-蜜橙黃","price":378,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%9B%99%E5%B1%A4%E5%AF%86%E5%B0%81%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%89%AF%E9%A3%9F%E5%93%81%E5%88%86%E8%A3%9D%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":29,"cat":"餐具系列","name":"MOYUUM 韓國 陶瓷點心碗附矽膠蓋-奶油黃","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%99%B6%E7%93%B7%E9%BB%9E%E5%BF%83%E7%A2%97%E9%99%84%E7%9F%BD%E8%86%A0%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":30,"cat":"餐具系列","name":"MOYUUM 韓國 陶瓷點心碗附矽膠蓋-豆沙紅","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%99%B6%E7%93%B7%E9%BB%9E%E5%BF%83%E7%A2%97%E9%99%84%E7%9F%BD%E8%86%A0%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":31,"cat":"餐具系列","name":"MOYUUM 韓國 陶瓷點心碗附矽膠蓋-燕麥白","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%99%B6%E7%93%B7%E9%BB%9E%E5%BF%83%E7%A2%97%E9%99%84%E7%9F%BD%E8%86%A0%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":32,"cat":"餐具系列","name":"MOYUUM 韓國 兒童304不鏽鋼湯叉餐具組","price":370,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%92%E7%AB%A5304%E4%B8%8D%E9%8F%BD%E9%8B%BC%E6%B9%AF%E5%8F%89%E9%A4%90%E5%85%B7%E7%B5%84"},{"no":33,"cat":"餐具系列","name":"MOYUUM 韓國 304不鏽鋼愛心湯叉組-奶油黃","price":422,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-304%E4%B8%8D%E9%8F%BD%E9%8B%BC%E6%84%9B%E5%BF%83%E6%B9%AF%E5%8F%89%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":34,"cat":"餐具系列","name":"MOYUUM 韓國 304不鏽鋼愛心湯叉組-豆沙紅","price":422,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-304%E4%B8%8D%E9%8F%BD%E9%8B%BC%E6%84%9B%E5%BF%83%E6%B9%AF%E5%8F%89%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":35,"cat":"餐具系列","name":"MOYUUM 韓國 304不鏽鋼愛心湯叉組-蜜糖粉","price":422,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-304%E4%B8%8D%E9%8F%BD%E9%8B%BC%E6%84%9B%E5%BF%83%E6%B9%AF%E5%8F%89%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":36,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式組合餐盤組 可頌系列-香蕉黃","price":871,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E7%B5%84%E5%90%88%E9%A4%90%E7%9B%A4%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":37,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式組合餐盤組 可頌系列-草莓白","price":871,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E7%B5%84%E5%90%88%E9%A4%90%E7%9B%A4%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":38,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式組合餐盤組 可頌系列-開心果綠","price":871,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E7%B5%84%E5%90%88%E9%A4%90%E7%9B%A4%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":39,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式餐盤盒 對話框系列-起司歐姆蛋","price":871,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E9%A4%90%E7%9B%A4%E7%9B%92-%E5%B0%8D%E8%A9%B1%E6%A1%86%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":40,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式餐盤盒 對話框系列-莓果甜心派","price":871,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E9%A4%90%E7%9B%A4%E7%9B%92-%E5%B0%8D%E8%A9%B1%E6%A1%86%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":41,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式餐盤盒 對話框系列-薰衣草下午茶","price":871,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E9%A4%90%E7%9B%A4%E7%9B%92-%E5%B0%8D%E8%A9%B1%E6%A1%86%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":42,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式餐盤盒-湖水藍","price":1038,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E9%A4%90%E7%9B%A4%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":43,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式餐盤盒-豆沙紅","price":1038,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E9%A4%90%E7%9B%A4%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":44,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠吸盤式餐盤盒-蜜橙黃","price":1038,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%90%B8%E7%9B%A4%E5%BC%8F%E9%A4%90%E7%9B%A4%E7%9B%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":45,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠兒童湯匙(2入/組)-奶黃+豆沙紅色","price":334,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%85%92%E7%AB%A5%E6%B9%AF%E5%8C%992%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":46,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠兒童湯匙(2入/組)-米色+灰色","price":334,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%85%92%E7%AB%A5%E6%B9%AF%E5%8C%992%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":47,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠兒童湯匙(2入/組)-綠色+灰色","price":334,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%85%92%E7%AB%A5%E6%B9%AF%E5%8C%992%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":48,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠兩用吸盤餐碗-豆沙紅","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%85%A9%E7%94%A8%E5%90%B8%E7%9B%A4%E9%A4%90%E7%A2%97-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":49,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠兩用吸盤餐碗-湖水藍","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%85%A9%E7%94%A8%E5%90%B8%E7%9B%A4%E9%A4%90%E7%A2%97-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":50,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠兩用吸盤餐碗-蜜橙黃","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%85%A9%E7%94%A8%E5%90%B8%E7%9B%A4%E9%A4%90%E7%A2%97-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":51,"cat":"餐具系列","name":"MOYUUM 韓國 組合分隔餐盤-玫瑰粉","price":722,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%B5%84%E5%90%88%E5%88%86%E9%9A%94%E9%A4%90%E7%9B%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":52,"cat":"餐具系列","name":"MOYUUM 韓國 組合分隔餐盤-燕麥藍","price":722,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%B5%84%E5%90%88%E5%88%86%E9%9A%94%E9%A4%90%E7%9B%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":53,"cat":"餐具系列","name":"MOYUUM 韓國 組合分隔餐盤-檸檬黃","price":722,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%B5%84%E5%90%88%E5%88%86%E9%9A%94%E9%A4%90%E7%9B%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":54,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠砧板-奶油黃","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E7%A0%A7%E6%9D%BF-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":55,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠砧板-南瓜橘","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E7%A0%A7%E6%9D%BF-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":56,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠砧板-質感灰","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E7%A0%A7%E6%9D%BF-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":57,"cat":"餐具系列","name":"MOYUUM 韓國 站立式白金矽膠三層密封袋 3入組-奶油黃","price":1100,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AB%99%E7%AB%8B%E5%BC%8F%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E4%B8%89%E5%B1%A4%E5%AF%86%E5%B0%81%E8%A2%8B-3%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":58,"cat":"餐具系列","name":"MOYUUM 韓國 站立式白金矽膠三層密封袋 3入組-草莓粉","price":1100,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AB%99%E7%AB%8B%E5%BC%8F%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E4%B8%89%E5%B1%A4%E5%AF%86%E5%B0%81%E8%A2%8B-3%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":59,"cat":"餐具系列","name":"MOYUUM 韓國 站立式白金矽膠三層密封袋 3入組-寧靜藍","price":1100,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AB%99%E7%AB%8B%E5%BC%8F%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E4%B8%89%E5%B1%A4%E5%AF%86%E5%B0%81%E8%A2%8B-3%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":60,"cat":"餐具系列","name":"MOYUUM 韓國 白金矽膠多功能餵食瓶3入組","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E5%A4%9A%E5%8A%9F%E8%83%BD%E9%A4%B5%E9%A3%9F%E7%93%B63%E5%85%A5%E7%B5%84"},{"no":61,"cat":"清潔系列","name":"MOYUUM 韓國 矽膠奶瓶奶嘴刷-白色","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%9F%BD%E8%86%A0%E5%A5%B6%E7%93%B6%E5%A5%B6%E5%98%B4%E5%88%B7-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":62,"cat":"清潔系列","name":"MOYUUM 韓國 矽膠奶瓶奶嘴刷-粉色","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%9F%BD%E8%86%A0%E5%A5%B6%E7%93%B6%E5%A5%B6%E5%98%B4%E5%88%B7-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":63,"cat":"清潔系列","name":"MOYUUM 韓國 矽膠奶瓶奶嘴刷-綠色","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%9F%BD%E8%86%A0%E5%A5%B6%E7%93%B6%E5%A5%B6%E5%98%B4%E5%88%B7-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":64,"cat":"清潔系列","name":"MOYUUM 韓國 360度旋轉奶瓶海綿刷-白色","price":163,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-360%E5%BA%A6%E6%97%8B%E8%BD%89%E5%A5%B6%E7%93%B6%E6%B5%B7%E7%B6%BF%E5%88%B7-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":65,"cat":"清潔系列","name":"MOYUUM 韓國 360度旋轉奶瓶海綿刷-粉色","price":163,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-360%E5%BA%A6%E6%97%8B%E8%BD%89%E5%A5%B6%E7%93%B6%E6%B5%B7%E7%B6%BF%E5%88%B7-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":66,"cat":"清潔系列","name":"MOYUUM 韓國 奶嘴海綿刷(2入/組)-白色","price":128,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A5%B6%E5%98%B4%E6%B5%B7%E7%B6%BF%E5%88%B72%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":67,"cat":"清潔系列","name":"MOYUUM 韓國 奶嘴海綿刷(2入/組)-粉色","price":128,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A5%B6%E5%98%B4%E6%B5%B7%E7%B6%BF%E5%88%B72%E5%85%A5%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":68,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-芒果黃(1-3m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":69,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-透明原色(1-3m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":70,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-棉花糖粉(1-3m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":71,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-棉花糖藍(1-3m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":72,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-蜜桃橘(1-3m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":73,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-馬卡龍粉(3-6m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":74,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-馬卡龍紫(3-6m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":75,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-馬卡龍黃(3-6m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":76,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-馬卡龍綠(6m+)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":77,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-莓果紅(6m+)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":78,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-透明(3-6m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":79,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-藍莓紫(3-6m)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":80,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-透明(6m+)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":81,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-芥末黃(6m+)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":82,"cat":"奶嘴系列","name":"MOYUUM 韓國 全矽膠微笑奶嘴收納盒組-馬卡龍白(6m+)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E5%BE%AE%E7%AC%91%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":83,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴0-6M-灰绿色","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":84,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴0-6M-米色","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":85,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴0-6M-粉橘色(夜光系列)","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":86,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴6M+-奶黃色(夜光系列)","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":87,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴6M+-灰色","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":88,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴6M+-灰绿色","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":89,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴6M+-米色","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":90,"cat":"奶嘴系列","name":"MOYUUM 韓國 母乳實感辛奇奶嘴6M+-粉色","price":207,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E6%AF%8D%E4%B9%B3%E5%AF%A6%E6%84%9F%E8%BE%9B%E5%A5%87%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":91,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能矽膠收納盒-奶黃色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E7%9F%BD%E8%86%A0%E6%94%B6%E7%B4%8D%E7%9B%92-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":92,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能矽膠收納盒-灰色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E7%9F%BD%E8%86%A0%E6%94%B6%E7%B4%8D%E7%9B%92-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":93,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能矽膠收納盒-米色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E7%9F%BD%E8%86%A0%E6%94%B6%E7%B4%8D%E7%9B%92-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":94,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能矽膠收納盒-粉色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E7%9F%BD%E8%86%A0%E6%94%B6%E7%B4%8D%E7%9B%92-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":95,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能矽膠收納盒-綠色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E7%9F%BD%E8%86%A0%E6%94%B6%E7%B4%8D%E7%9B%92-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":96,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能奶嘴鍊夾-米色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A5%B6%E5%98%B4%E9%8D%8A%E5%A4%BE-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":97,"cat":"奶嘴系列","name":"MOYUUM 韓國 多功能奶嘴鍊夾-綠色","price":282,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A5%B6%E5%98%B4%E9%8D%8A%E5%A4%BE-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":98,"cat":"奶嘴系列","name":"MOYUUM 韓國 透氣式矽膠奶嘴收納盒組 蝴蝶款(1-3m)-芒果黃","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%80%8F%E6%B0%A3%E5%BC%8F%E7%9F%BD%E8%86%A0%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E8%9D%B4%E8%9D%B6%E6%AC%BE-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":99,"cat":"奶嘴系列","name":"MOYUUM 韓國 透氣式矽膠奶嘴收納盒組 蝴蝶款(1-3m)-薰衣草紫(夜光款)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%80%8F%E6%B0%A3%E5%BC%8F%E7%9F%BD%E8%86%A0%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E8%9D%B4%E8%9D%B6%E6%AC%BE-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":100,"cat":"奶嘴系列","name":"MOYUUM 韓國 透氣式矽膠奶嘴收納盒組 蝴蝶款(3~6m)-豆沙粉","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%80%8F%E6%B0%A3%E5%BC%8F%E7%9F%BD%E8%86%A0%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E8%9D%B4%E8%9D%B6%E6%AC%BE-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":101,"cat":"奶嘴系列","name":"MOYUUM 韓國 透氣式矽膠奶嘴收納盒組 蝴蝶款(3~6m)-鼠尾草綠(夜光款)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%80%8F%E6%B0%A3%E5%BC%8F%E7%9F%BD%E8%86%A0%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E8%9D%B4%E8%9D%B6%E6%AC%BE-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":102,"cat":"奶嘴系列","name":"MOYUUM 韓國 透氣式矽膠奶嘴收納盒組 蝴蝶款(6m+)-晨霧藍(夜光款)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%80%8F%E6%B0%A3%E5%BC%8F%E7%9F%BD%E8%86%A0%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E8%9D%B4%E8%9D%B6%E6%AC%BE-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":103,"cat":"奶嘴系列","name":"MOYUUM 韓國 透氣式矽膠奶嘴收納盒組 蝴蝶款(6m+)-蘋果紅","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%80%8F%E6%B0%A3%E5%BC%8F%E7%9F%BD%E8%86%A0%E5%A5%B6%E5%98%B4%E6%94%B6%E7%B4%8D%E7%9B%92%E7%B5%84-%E8%9D%B4%E8%9D%B6%E6%AC%BE-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":104,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手套固齒器 小小象-透明原色","price":405,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E5%A5%97%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%B0%8F%E5%B0%8F%E8%B1%A1-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":105,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手套固齒器 小小象-葡萄紫","price":405,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E5%A5%97%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%B0%8F%E5%B0%8F%E8%B1%A1-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":106,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手套固齒器 小小象-蜜桃橘","price":405,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E5%A5%97%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%B0%8F%E5%B0%8F%E8%B1%A1-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":107,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手套固齒器 小小象-檸檬黃","price":405,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E5%A5%97%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%B0%8F%E5%B0%8F%E8%B1%A1-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":108,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 小星星-沉穩灰","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":109,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 小星星-珊瑚粉","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":110,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 小星星-透明原色","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":111,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 小星星-質感灰","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":112,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 小星星-薄荷綠","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":113,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 咘咕鳥-珊瑚橘","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":114,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 咘咕鳥-透明原色","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":115,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 咘咕鳥-湖水藍","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":116,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 咘咕鳥-橄欖綠","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":117,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 咘咕鳥-檸檬黃","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":118,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 飛飛馬-天空藍","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":119,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 飛飛馬-透明原色","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":120,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 飛飛馬-蜜橙橘","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":121,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 飛飛馬-檸檬黃","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":122,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器 飛飛馬-櫻花粉","price":308,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":123,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器-咘咕星禮盒(檸檬黃+珊瑚粉)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":124,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器-咘咕馬禮盒(珊瑚橘+檸檬黃)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":125,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器-星馬禮盒(薄荷綠+天空藍)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":126,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器-星馬禮盒(薄荷綠+檸檬黃)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":127,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器-星馬禮盒(檸檬黃+珊瑚粉)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":128,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器收納組-拇指獅(芒果黃)","price":370,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8%E6%94%B6%E7%B4%8D%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":129,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器收納組-拇指獅(透明原色)","price":370,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8%E6%94%B6%E7%B4%8D%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":130,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器收納組-拇指獅(葡萄紫)","price":370,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8%E6%94%B6%E7%B4%8D%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":131,"cat":"固齒器系列","name":"MOYUUM 韓國 白金矽膠手環固齒器收納組-拇指獅(蜜桃橘)","price":370,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%99%BD%E9%87%91%E7%9F%BD%E8%86%A0%E6%89%8B%E7%92%B0%E5%9B%BA%E9%BD%92%E5%99%A8%E6%94%B6%E7%B4%8D%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":132,"cat":"固齒器系列","name":"MOYUUM 韓國 固齒器水果咬咬棒-蜜桃粉","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%9B%BA%E9%BD%92%E5%99%A8%E6%B0%B4%E6%9E%9C%E5%92%AC%E5%92%AC%E6%A3%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":133,"cat":"固齒器系列","name":"MOYUUM 韓國 固齒器水果咬咬棒-檸檬黃","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%9B%BA%E9%BD%92%E5%99%A8%E6%B0%B4%E6%9E%9C%E5%92%AC%E5%92%AC%E6%A3%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":134,"cat":"固齒器系列","name":"MOYUUM 韓國 固齒器水果咬咬棒-蘋果綠","price":431,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%9B%BA%E9%BD%92%E5%99%A8%E6%B0%B4%E6%9E%9C%E5%92%AC%E5%92%AC%E6%A3%92-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":135,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶 0m+ 170ml -莓果心心(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":136,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶 0m+ 170ml -蜜橙心心(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":137,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶 0m+ 170ml -剪影兔","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":138,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶 0m+ 170ml -棉棉兔","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":139,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶 0m+ 170ml -貓咪夢境(暖杏白)(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":140,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶 0m+ 170ml -貓咪夢境(葡萄紫)(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":141,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶0m+ 170ml-小雛菊","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":142,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶0m+ 170ml-乖乖睡寶貝(珊瑚粉)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":143,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶0m+ 170ml-乖乖睡寶貝(薄荷藍)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":144,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶0m+ 170ml-草泥馬樂園","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":145,"cat":"奶瓶系列","name":"MOYUUM 韓國 第二代PPSU寬口奶瓶0m+ 170ml-飄飄雲","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":146,"cat":"奶瓶系列","name":"MOYUUM 韓國 多功能奶粉分裝儲存盒(3層)-奶茶粉","price":255,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A5%B6%E7%B2%89%E5%88%86%E8%A3%9D%E5%84%B2%E5%AD%98%E7%9B%923%E5%B1%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":147,"cat":"奶瓶系列","name":"MOYUUM 韓國 多功能奶粉分裝儲存盒(3層)-香草白","price":255,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A5%B6%E7%B2%89%E5%88%86%E8%A3%9D%E5%84%B2%E5%AD%98%E7%9B%923%E5%B1%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":148,"cat":"奶瓶系列","name":"MOYUUM 韓國 多功能奶粉分裝儲存盒(3層)-微笑泡泡","price":290,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E5%A5%B6%E7%B2%89%E5%88%86%E8%A3%9D%E5%84%B2%E5%AD%98%E7%9B%923%E5%B1%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":149,"cat":"奶瓶系列","name":"MOYUUM 韓國 多功能長柄海綿杯刷(3入/組)","price":220,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%A4%9A%E5%8A%9F%E8%83%BD%E9%95%B7%E6%9F%84%E6%B5%B7%E7%B6%BF%E6%9D%AF%E5%88%B73%E5%85%A5%E7%B5%84"},{"no":150,"cat":"奶瓶系列","name":"MOYUUM 韓國 長柄海綿奶嘴刷(5入/組)","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E9%95%B7%E6%9F%84%E6%B5%B7%E7%B6%BF%E5%A5%B6%E5%98%B4%E5%88%B75%E5%85%A5%E7%B5%84"},{"no":151,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代仿母乳型替換奶嘴 (0m+) 2入組","price":198,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3%E4%BB%BF%E6%AF%8D%E4%B9%B3%E5%9E%8B%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":152,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代仿母乳型替換奶嘴 (1m+) 2入組","price":198,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3%E4%BB%BF%E6%AF%8D%E4%B9%B3%E5%9E%8B%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":153,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代仿母乳型替換奶嘴 (3m+) 2入組","price":198,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3%E4%BB%BF%E6%AF%8D%E4%B9%B3%E5%9E%8B%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":154,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代仿母乳型替換奶嘴 (6m+) 2入組","price":198,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3%E4%BB%BF%E6%AF%8D%E4%B9%B3%E5%9E%8B%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":155,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代仿母乳型替換奶嘴 (8m+) 2入組","price":198,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3%E4%BB%BF%E6%AF%8D%E4%B9%B3%E5%9E%8B%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":156,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (0m+) 80ml","price":343,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":157,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml","price":422,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":158,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":159,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (6m+) 330ml","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":160,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml-蜜桃心心(SOOSOOJIN聯名款)","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":161,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml-蜜桃心心(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":162,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (6m+) 330ml-蜜桃心心(SOOSOOJIN聯名款)","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":163,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml-貓咪夢境(檸檬黃)(SOOSOOJIN聯名款)","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":164,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml-貓咪夢境(檸檬黃)(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":165,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (6m+) 330ml-貓咪夢境(檸檬黃)(SOOSOOJIN聯名款)","price":510,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":166,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml-草泥馬樂園","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":167,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml-草泥馬樂園","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":168,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml-點點兔","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":169,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml-點點兔","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":170,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml-逐夢小馬(晨霧藍)(SOOSOOJIN聯名款)","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":171,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (1m+) 170ml-逐夢小馬(蘋果紅)(SOOSOOJIN聯名款)","price":458,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":172,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml-逐夢小馬(晨霧藍)(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":173,"cat":"奶瓶系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶 (3m+) 270ml-逐夢小馬(蘋果紅)(SOOSOOJIN聯名款)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":174,"cat":"奶瓶系列","name":"MOYUUM 韓國 寬口矽膠玻璃奶瓶 150ml(0m+)-微笑泡泡","price":607,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E7%9F%BD%E8%86%A0%E7%8E%BB%E7%92%83%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":175,"cat":"奶瓶系列","name":"MOYUUM 韓國 寬口矽膠玻璃奶瓶 240ml(2m+)-微笑泡泡","price":669,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E7%9F%BD%E8%86%A0%E7%8E%BB%E7%92%83%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":176,"cat":"奶瓶系列","name":"MOYUUM 韓國 寬口矽膠玻璃奶瓶 150ml(0m+)-雲朵白","price":572,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E7%9F%BD%E8%86%A0%E7%8E%BB%E7%92%83%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":177,"cat":"奶瓶系列","name":"MOYUUM 韓國 寬口矽膠玻璃奶瓶 240ml(2m+)-雲朵白","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%AF%AC%E5%8F%A3%E7%9F%BD%E8%86%A0%E7%8E%BB%E7%92%83%E5%A5%B6%E7%93%B6-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":178,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口偏心替換奶嘴(0m+) 2入組","price":299,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":179,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口偏心替換奶嘴(1m+) 2入組","price":299,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":180,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口偏心替換奶嘴(3m+) 2入組","price":299,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":181,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口偏心替換奶嘴(6m+) 2入組","price":299,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":182,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口偏心替換奶嘴(8m+) 2入組","price":299,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E6%9B%BF%E6%8F%9B%E5%A5%B6%E5%98%B4-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":183,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口萬用儲存蓋-珊瑚粉","price":97,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E8%90%AC%E7%94%A8%E5%84%B2%E5%AD%98%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":184,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口萬用儲存蓋-香草白","price":97,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E8%90%AC%E7%94%A8%E5%84%B2%E5%AD%98%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":185,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa 圓口萬用儲存蓋-薄荷綠","price":97,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-mov-aa-%E5%9C%93%E5%8F%A3%E8%90%AC%E7%94%A8%E5%84%B2%E5%AD%98%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":186,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa PPSU圓口偏心奶瓶 160ml(1m+)-幾何馬戲團(WeSee聯名款)","price":748,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E5%A5%B6%E7%93%B6%E5%85%A8%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":187,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa PPSU圓口偏心奶瓶 160ml(1m+)-微笑花園(WeSee聯名款)","price":748,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E5%A5%B6%E7%93%B6%E5%85%A8%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":188,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa PPSU圓口偏心奶瓶 160ml(1m+)-經典款","price":695,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E5%A5%B6%E7%93%B6%E5%85%A8%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":189,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa PPSU圓口偏心奶瓶 250ml(3m+)-幾何馬戲團(WeSee聯名款)","price":836,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E5%A5%B6%E7%93%B6%E5%85%A8%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":190,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa PPSU圓口偏心奶瓶 250ml(3m+)-微笑花園(WeSee聯名款)","price":836,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E5%A5%B6%E7%93%B6%E5%85%A8%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":191,"cat":"奶瓶系列","name":"MOYUUM 韓國 Mov.aa PPSU圓口偏心奶瓶 250ml(3m+)-經典款","price":783,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa%E5%9C%93%E5%8F%A3%E5%81%8F%E5%BF%83%E5%A5%B6%E7%93%B6%E5%85%A8%E7%B3%BB%E5%88%97-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":192,"cat":"水杯系列","name":"MOYUUM 韓國 全矽膠三合一吸管學飲水杯組-香蕉黃","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E4%B8%89%E5%90%88%E4%B8%80%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":193,"cat":"水杯系列","name":"MOYUUM 韓國 全矽膠三合一吸管學飲水杯組-草莓粉","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E4%B8%89%E5%90%88%E4%B8%80%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":194,"cat":"水杯系列","name":"MOYUUM 韓國 全矽膠三合一吸管學飲水杯組-開心果綠","price":484,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E5%85%A8%E7%9F%BD%E8%86%A0%E4%B8%89%E5%90%88%E4%B8%80%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF%E7%B5%84-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":195,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 170ml 歡樂派對(莓果紅)","price":651,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":196,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 170ml 歡樂派對(薄荷綠)","price":651,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":197,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 170ml-粉嫩帕皮","price":598,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":198,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 170ml-動物萌友(SOOSOOJIN聯名款)","price":598,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":199,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 170ml-貓咪夢境(葡萄紫)(SOOSOOJIN聯名款)","price":598,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":200,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 170ml-貓咪夢境(質感灰)(SOOSOOJIN聯名款)","price":598,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":201,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 270ml 歡樂派對(莓果紅)","price":695,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":202,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 270ml 歡樂派對(薄荷綠)","price":695,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":203,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 270ml-粉嫩帕皮","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":204,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 270ml-動物萌友(SOOSOOJIN聯名款)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":205,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 270ml-貓咪夢境(葡萄紫)(SOOSOOJIN聯名款)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":206,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 270ml-貓咪夢境(質感灰)(SOOSOOJIN聯名款)","price":634,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":207,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 330ml-動物萌友 (SOOSOOJIN 聯名款)","price":686,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":208,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 330ml-貓咪夢境(暖杏白) (SOOSOOJIN 聯名款)","price":686,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":209,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯 330ml-貓咪夢境(葡萄紫) (SOOSOOJIN 聯名款)","price":686,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":210,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯蓋-暖杏白","price":224,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":211,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯蓋-葡萄紫","price":224,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":212,"cat":"水杯系列","name":"MOYUUM 韓國 PPSU彈蓋吸管學飲水杯蓋-櫻花粉","price":224,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-ppsu%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF%E8%93%8B-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":213,"cat":"水杯系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶吸管水杯套件組-米粉藕","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E5%90%B8%E7%AE%A1%E6%B0%B4%E6%9D%AF%E5%A5%97%E4%BB%B6%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":214,"cat":"水杯系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶吸管水杯套件組-芝麻黑","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E5%90%B8%E7%AE%A1%E6%B0%B4%E6%9D%AF%E5%A5%97%E4%BB%B6%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":215,"cat":"水杯系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶吸管水杯套件組-珊瑚粉","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E5%90%B8%E7%AE%A1%E6%B0%B4%E6%9D%AF%E5%A5%97%E4%BB%B6%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":216,"cat":"水杯系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶吸管水杯套件組-香草白","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E5%90%B8%E7%AE%A1%E6%B0%B4%E6%9D%AF%E5%A5%97%E4%BB%B6%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":217,"cat":"水杯系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶吸管水杯套件組-檸檬黃","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E5%90%B8%E7%AE%A1%E6%B0%B4%E6%9D%AF%E5%A5%97%E4%BB%B6%E7%B5%84-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8"},{"no":218,"cat":"水杯系列","name":"MOYUUM 韓國 第三代PPSU寬口奶瓶替換吸管組","price":263,"url":"https://www.yodee.com.tw/products/moyuum-%E9%9F%93%E5%9C%8B-%E7%AC%AC%E4%B8%89%E4%BB%A3ppsu%E5%AF%AC%E5%8F%A3%E5%A5%B6%E7%93%B6%E6%9B%BF%E6%8F%9B%E5%90%B8%E7%AE%A1%E7%B5%84"},{"no":219,"cat":"水杯系列","name":"MOYUUM 韓國 mov.aa TRITAN彈蓋吸管學飲水杯 250ml-星願小馬(聯名款)","price":783,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa-tritan%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":220,"cat":"水杯系列","name":"MOYUUM 韓國 mov.aa TRITAN彈蓋吸管學飲水杯-吸管杯蓋套件組(星願粉)","price":484,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa-tritan%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"},{"no":221,"cat":"水杯系列","name":"MOYUUM 韓國 mov.aa TRITAN彈蓋吸管學飲水杯-替換吸管組","price":317,"url":"https://www.yodee.com.tw/products/moyuum-mov-aa-tritan%E5%BD%88%E8%93%8B%E5%90%B8%E7%AE%A1%E5%AD%B8%E9%A3%B2%E6%B0%B4%E6%9D%AF-%E5%A4%9A%E6%AC%BE%E5%8F%AF%E9%81%B8"}];
+
+const CAT_ICONS = {'馬年新生兒限定禮盒':'🎁','餐具系列':'🍽','清潔系列':'🧼','奶嘴系列':'😊','固齒器系列':'🦷','奶瓶系列':'🍼','水杯系列':'🥤'};
+const CATEGORIES = [...new Set(PRODUCTS.map(p => p.cat))];
+
+let cart = {}; // key: no, value: qty
+let activeCat = 'all';
+let searchQ = '';
+
+// Build category filter buttons
+const filtersEl = document.getElementById('catFilters');
+const allBtn = document.createElement('button');
+allBtn.className = 'cat-btn active';
+allBtn.textContent = '全部';
+allBtn.dataset.cat = 'all';
+filtersEl.appendChild(allBtn);
+CATEGORIES.forEach(cat => {
+  const btn = document.createElement('button');
+  btn.className = 'cat-btn';
+  btn.textContent = (CAT_ICONS[cat]||'') + ' ' + cat;
+  btn.dataset.cat = cat;
+  filtersEl.appendChild(btn);
+});
+
+filtersEl.addEventListener('click', e => {
+  const btn = e.target.closest('.cat-btn');
+  if (!btn) return;
+  activeCat = btn.dataset.cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b === btn));
+  render();
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQ = e.target.value.trim();
+  render();
+});
+
+function render() {
+  const wrap = document.getElementById('mainWrap');
+  const filtered = PRODUCTS.filter(p => {
+    const catOk = activeCat === 'all' || p.cat === activeCat;
+    const searchOk = !searchQ || p.name.includes(searchQ);
+    return catOk && searchOk;
+  });
+
+  if (!filtered.length) {
+    wrap.innerHTML = '<div class="no-results">🔍 找不到符合的商品</div>';
+    return;
+  }
+
+  // Group by category
+  const groups = {};
+  filtered.forEach(p => { (groups[p.cat] = groups[p.cat]||[]).push(p); });
+
+  wrap.innerHTML = Object.entries(groups).map(([cat, items]) => `
+    <div class="cat-section">
+      <div class="cat-header">
+        <span class="cat-icon">${CAT_ICONS[cat]||'📦'}</span>
+        <span class="cat-title">${cat}</span>
+        <span class="cat-count">${items.length} 項</span>
+      </div>
+      ${items.map(p => `
+        <div class="product-row" id="row-${p.no}">
+          <span class="row-no">${p.no}</span>
+          <span class="row-name">${p.name}</span>
+          <a class="row-link" href="${p.url}" target="_blank" rel="noopener">🔗 查看</a>
+          <span class="row-price">NT$${p.price.toLocaleString()}</span>
+          <button class="row-add ${cart[p.no] ? 'in-cart' : ''}" data-no="${p.no}" title="加入清單">
+            ${cart[p.no] ? '✓' : '+'}
+          </button>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  // Bind add buttons
+  wrap.querySelectorAll('.row-add').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const no = +btn.dataset.no;
+      if (cart[no]) {
+        delete cart[no];
+      } else {
+        cart[no] = 1;
+      }
+      updateCartCount();
+      // Update just this button
+      const inCart = !!cart[no];
+      btn.classList.toggle('in-cart', inCart);
+      btn.textContent = inCart ? '✓' : '+';
+    });
+  });
+}
+
+function updateCartCount() {
+  const total = Object.values(cart).reduce((a,b) => a+b, 0);
+  document.getElementById('cartCount').textContent = total;
+}
+
+// Cart modal
+document.getElementById('cartBtn').addEventListener('click', openCart);
+document.getElementById('closeCart').addEventListener('click', () => {
+  document.getElementById('cartOverlay').classList.remove('open');
+});
+document.getElementById('cartOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+});
+
+function openCart() {
+  renderCart();
+  document.getElementById('cartOverlay').classList.add('open');
+}
+
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const keys = Object.keys(cart).map(Number).filter(n => cart[n] > 0);
+  if (!keys.length) {
+    body.innerHTML = '<div class="cart-empty">清單是空的，快去挑選商品吧！</div>';
+    document.getElementById('cartTotalAmt').textContent = 'NT$0';
+    return;
+  }
+  let total = 0;
+  body.innerHTML = keys.map(no => {
+    const p = PRODUCTS.find(x => x.no === no);
+    const subtotal = p.price * cart[no];
+    total += subtotal;
+    return `
+      <div class="cart-item">
+        <span class="cart-item-name">${p.name}</span>
+        <div class="cart-qty-wrap">
+          <button class="qty-btn" data-no="${no}" data-action="minus">−</button>
+          <span class="qty-num">${cart[no]}</span>
+          <button class="qty-btn" data-no="${no}" data-action="plus">+</button>
+        </div>
+        <span class="cart-item-price">NT$${subtotal.toLocaleString()}</span>
+        <button class="cart-del" data-no="${no}">✕</button>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('cartTotalAmt').textContent = 'NT$' + total.toLocaleString();
+
+  body.querySelectorAll('.qty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const no = +btn.dataset.no;
+      if (btn.dataset.action === 'plus') cart[no]++;
+      else { cart[no]--; if (cart[no] <= 0) delete cart[no]; }
+      updateCartCount();
+      renderCart();
+      render(); // refresh add buttons
+    });
+  });
+  body.querySelectorAll('.cart-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      delete cart[+btn.dataset.no];
+      updateCartCount();
+      renderCart();
+      render();
+    });
+  });
+}
+
+// Generate order text
+document.getElementById('copyOrderBtn').addEventListener('click', () => {
+  const keys = Object.keys(cart).map(Number).filter(n => cart[n] > 0);
+  if (!keys.length) { showToast('請先加入商品'); return; }
+  let lines = ['📦 MOYUUM 韓國 私密社團開團訂單\n'];
+  let total = 0;
+  keys.forEach(no => {
+    const p = PRODUCTS.find(x => x.no === no);
+    const sub = p.price * cart[no];
+    total += sub;
+    lines.push(`${p.name}\n  × ${cart[no]} 件  NT$${p.price} = NT$${sub.toLocaleString()}`);
+  });
+  lines.push(`\n合計：NT$${total.toLocaleString()}`);
+  document.getElementById('orderText').value = lines.join('\n');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('orderOverlay').classList.add('open');
+});
+
+document.getElementById('closeOrder').addEventListener('click', () => document.getElementById('orderOverlay').classList.remove('open'));
+document.getElementById('closeOrder2').addEventListener('click', () => document.getElementById('orderOverlay').classList.remove('open'));
+document.getElementById('orderOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+});
+document.getElementById('doCopy').addEventListener('click', () => {
+  const text = document.getElementById('orderText').value;
+  navigator.clipboard.writeText(text).then(() => showToast('✅ 已複製，貼給團主吧！')).catch(() => {
+    document.getElementById('orderText').select();
+    document.execCommand('copy');
+    showToast('✅ 已複製！');
+  });
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+render();
+</script>
+</body>
+</html>
