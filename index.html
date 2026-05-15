@@ -285,9 +285,16 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
       <div class="card-head">📦 訂購明細</div>
       <div class="card-body">
         <div id="coSummaryItems"></div>
-        <div class="sum-total">
-          <span>合計金額</span>
-          <span id="coTotal">NT$0</span>
+        <div class="sum-total" style="flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:400;color:var(--muted)">
+            <span>商品小計</span><span id="coSubtotal" style="font-family:'DM Mono',monospace">NT$0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:400;color:var(--muted)">
+            <span>運費</span><span id="coShipping" style="font-family:'DM Mono',monospace;color:var(--green)">NT$0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--deep);border-top:1px dashed var(--border);padding-top:8px;margin-top:4px">
+            <span>合計金額</span><span id="coTotal" style="font-family:'DM Mono',monospace;color:var(--terra)">NT$0</span>
+          </div>
         </div>
       </div>
     </div>
@@ -297,6 +304,13 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
       <div class="card-head">👤 收件人資料</div>
       <div class="card-body">
         <div class="form-title">基本資訊</div>
+        <div class="grid1">
+          <div class="field" id="f-nickname">
+            <label>社群內名稱<span class="req">*</span></label>
+            <input id="inp-nickname" type="text" placeholder="您在社團內的名稱">
+            <span class="ferr">請填寫社群內名稱</span>
+          </div>
+        </div>
         <div class="grid2">
           <div class="field" id="f-name">
             <label>姓名<span class="req">*</span></label>
@@ -329,6 +343,18 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
           </div>
         </div>
         <div class="grid1">
+          <div class="field" id="f-shipping">
+            <label>配送方式<span class="req">*</span></label>
+            <select id="inp-shipping" onchange="updateShipping()">
+              <option value="">請選擇配送方式</option>
+              <option value="711">7-ELEVEN 超商取貨（滿NT$1,500免運，未滿NT$60）</option>
+              <option value="family">全家 超商取貨（滿NT$1,500免運，未滿NT$60）</option>
+              <option value="home">新竹物流 宅配（滿NT$2,000免運，未滿NT$100）</option>
+            </select>
+            <span class="ferr">請選擇配送方式</span>
+          </div>
+        </div>
+        <div class="grid1">
           <div class="field" id="f-addr">
             <label>收件地址<span class="req">*</span></label>
             <input id="inp-addr" type="text" placeholder="請填寫完整地址（路段、巷弄、門號）">
@@ -350,17 +376,22 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
       <div class="card-body">
         <div class="pay-opts">
           <label class="pay-opt on">
-            <input type="radio" name="payMethod" value="transfer" checked>
+            <input type="radio" name="payMethod" value="transfer" checked onclick="togglePayDetail()">
             <div class="pay-opt-body">
               <div class="pay-title">🏦 ATM 匯款 / 轉帳</div>
               <div class="pay-desc">下單後請於 48 小時內完成匯款，並填寫帳號後五碼</div>
             </div>
           </label>
           <label class="pay-opt">
-            <input type="radio" name="payMethod" value="linepay">
+            <input type="radio" name="payMethod" value="linepay" onclick="togglePayDetail()">
             <div class="pay-opt-body">
-              <div class="pay-title">💚 LINE Pay</div>
-              <div class="pay-desc">下單後團主會私訊傳送付款連結</div>
+              <div class="pay-title">💚 LINE Pay / iPASS（好友手機轉帳，免手續費）</div>
+              <div class="pay-desc">請先加闆娘 LINE 好友後直接轉帳<br>
+                <a href="https://line.me/ti/p/taMX75HZDW" target="_blank"
+                   style="color:var(--green);font-size:11px;display:inline-flex;align-items:center;gap:4px;margin-top:4px;text-decoration:none">
+                  ➕ 加好友「霓 ɴɪɴɪ 💐」
+                </a>
+              </div>
             </div>
           </label>
         </div>
@@ -486,7 +517,7 @@ const CONFIG = {
   bankAccount: '28881023351575',
   bankHolder: '',
   googleFormUrl: 'https://docs.google.com/forms/d/1YIZlIm0tpuU9DjmbJSpJcDVhRBhem9X1HsTLluL9bgA/viewform',
-  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbyBGEkT4WnPmnrRr2_RsqEdDC7NNwAHyzcwthbt72lgGJO-9ueljB6kZtTI2JID2mj3/exec', // Apps Script URL
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzQkZIMVxUd4bbfCAUy8aAg2ikYAuol__me_zpMZiNrQIdRWm5JnsrdlXYyHawSDXwL/exec', // Apps Script URL
 };
 
 // ━━━━━━━━ PRODUCTS ━━━━━━━━
@@ -671,31 +702,53 @@ function openCheckout(){
     ${CONFIG.bankHolder ? `<div class="bank-row"><span class="bank-k">戶名</span><span class="bank-v">${CONFIG.bankHolder}</span></div>` : ''}
   `;
 
+  updateShipping();
   showPage('pageCheckout');
 }
 
 // payment toggle
+function togglePayDetail(){
+  document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('on'));
+  const checked=document.querySelector('input[name=payMethod]:checked');
+  if(checked) checked.closest('.pay-opt').classList.add('on');
+  const val=checked?checked.value:'transfer';
+  $('bankBox').classList.toggle('show', val==='transfer');
+  $('remitField').style.display=val==='transfer'?'block':'none';
+}
 document.querySelectorAll('.pay-opt').forEach(opt=>{
-  opt.addEventListener('click',()=>{
-    document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('on'));
-    opt.classList.add('on');
-    const val=opt.querySelector('input').value;
-    $('bankBox').classList.toggle('show', val==='transfer');
-    $('remitField').style.display=val==='transfer'?'block':'none';
-  });
+  opt.addEventListener('click',()=>togglePayDetail());
 });
+
+// 運費計算
+function calcShipping(){
+  const subtotal=cartTotal();
+  const ship=$('inp-shipping')?$('inp-shipping').value:'';
+  if(!ship) return 0;
+  if(ship==='711'||ship==='family') return subtotal>=1500?0:60;
+  if(ship==='home') return subtotal>=2000?0:100;
+  return 0;
+}
+function updateShipping(){
+  const subtotal=cartTotal();
+  const fee=calcShipping();
+  if($('coSubtotal')) $('coSubtotal').textContent=fmt(subtotal);
+  if($('coShipping')) $('coShipping').textContent=fee===0?'免運':'NT$'+fee;
+  if($('coTotal')) $('coTotal').textContent=fmt(subtotal+fee);
+}
 
 // submit
 $('submitBtn').addEventListener('click',()=>{
   // validate
   let ok=true;
+  const nickname=$('inp-nickname').value.trim();
   const name=$('inp-name').value.trim();
   const phone=$('inp-phone').value.trim();
   const addr=$('inp-addr').value.trim();
+  const shipping=$('inp-shipping').value;
   const payMethod=document.querySelector('input[name=payMethod]:checked').value;
   const remit=$('inp-remit').value.trim();
 
-  [['f-name',name],['f-phone',phone&&/^09\d{8}$/.test(phone)],['f-addr',addr]].forEach(([id,v])=>{
+  [['f-nickname',nickname],['f-name',name],['f-phone',phone&&/^09\d{8}$/.test(phone)],['f-addr',addr],['f-shipping',shipping]].forEach(([id,v])=>{
     const f=$(id); f.classList.toggle('bad',!v); if(!v) ok=false;
   });
 
@@ -716,16 +769,22 @@ $('submitBtn').addEventListener('click',()=>{
     return{name:p.name,qty:cart[no],price:p.price,sub};
   });
 
+  const shippingFee=calcShipping();
+  const shipLabels={'711':'7-ELEVEN 超商取貨','family':'全家 超商取貨','home':'新竹物流 宅配'};
   lastOrder={
     ref:'MYM-'+Date.now().toString(36).toUpperCase(),
+    nickname,
     name, phone,
     line:$('inp-line').value.trim()||'—',
     city:$('inp-city').value||'—',
     addr,
     note:$('inp-note').value.trim()||'—',
+    shipping: shipLabels[shipping]||shipping,
+    shippingFee,
     payMethod,
     remit: payMethod==='transfer'?remit:'—',
-    items, total,
+    items, total: total+shippingFee,
+    subtotal: total,
     time: new Date().toLocaleString('zh-TW')
   };
 
@@ -737,15 +796,19 @@ function submitToSheet(order){
   const payload = {
     ref: order.ref,
     time: order.time,
+    nickname: order.nickname,
     name: order.name,
     phone: order.phone,
     line: order.line,
     city: order.city,
     addr: order.addr,
     note: order.note,
+    shipping: order.shipping,
+    shippingFee: order.shippingFee,
     payMethod: order.payMethod,
     remit: order.remit,
     items: order.items,
+    subtotal: order.subtotal,
     total: order.total
   };
   fetch(CONFIG.appsScriptUrl, {
@@ -808,13 +871,16 @@ $('copyOrderBtn').addEventListener('click',()=>{
   const lines=[
     '📦 MOYUUM 私密社團訂單',
     '━━━━━━━━━━━━━━',
+    `社群名稱：${o.nickname}`,
     `姓名：${o.name}`,
     `手機：${o.phone}`,
     `LINE：${o.line}`,
+    `配送：${o.shipping}`,
     `地址：${o.city} ${o.addr}`,
     `備註：${o.note}`,
-    `付款：${o.payMethod==='transfer'?'ATM匯款':'LINE Pay'}`,
+    `付款：${o.payMethod==='transfer'?'ATM匯款':'LINE Pay / iPASS'}`,
     o.payMethod==='transfer'?`後五碼：${o.remit}`:'',
+    `運費：${o.shippingFee===0?'免運':'NT$'+o.shippingFee}`,
     '━━━━━━━━━━━━━━',
     ...o.items.map(i=>`${i.name}\n  × ${i.qty}  ${fmt(i.sub)}`),
     '━━━━━━━━━━━━━━',
