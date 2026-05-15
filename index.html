@@ -312,6 +312,8 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
       <div class="card-head">👤 收件人資料</div>
       <div class="card-body">
         <div class="form-title">基本資訊</div>
+
+        <!-- 社群名稱 -->
         <div class="grid1">
           <div class="field" id="f-nickname">
             <label>社群內名稱<span class="req">*</span></label>
@@ -319,37 +321,34 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
             <span class="ferr">請填寫社群內名稱</span>
           </div>
         </div>
-        <div class="grid2">
+
+        <!-- 姓名 -->
+        <div class="grid1">
           <div class="field" id="f-name">
             <label>姓名<span class="req">*</span></label>
             <input id="inp-name" type="text" placeholder="王小明">
             <span class="ferr">請填寫姓名</span>
           </div>
+        </div>
+
+        <!-- 手機 -->
+        <div class="grid1">
           <div class="field" id="f-phone">
             <label>手機<span class="req">*</span></label>
             <input id="inp-phone" type="tel" placeholder="09xxxxxxxx">
             <span class="ferr">請填寫有效手機</span>
           </div>
         </div>
-        <div class="grid2">
+
+        <!-- LINE ID（獨立一排） -->
+        <div class="grid1">
           <div class="field">
             <label>LINE ID</label>
             <input id="inp-line" type="text" placeholder="選填">
           </div>
-          <div class="field" id="f-city-wrap">
-            <label>縣市</label>
-            <select id="inp-city">
-              <option value="">請選擇</option>
-              <option>台北市</option><option>新北市</option><option>基隆市</option>
-              <option>桃園市</option><option>新竹市</option><option>新竹縣</option>
-              <option>苗栗縣</option><option>台中市</option><option>彰化縣</option>
-              <option>南投縣</option><option>雲林縣</option><option>嘉義市</option>
-              <option>嘉義縣</option><option>台南市</option><option>高雄市</option>
-              <option>屏東縣</option><option>宜蘭縣</option><option>花蓮縣</option>
-              <option>台東縣</option><option>澎湖縣</option><option>金門縣</option><option>連江縣</option>
-            </select>
-          </div>
         </div>
+
+        <!-- 配送方式 -->
         <div class="grid1">
           <div class="field" id="f-shipping">
             <label>配送方式<span class="req">*</span></label>
@@ -363,25 +362,43 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
           </div>
         </div>
 
-        <!-- 超商門市欄位（選7-11或全家時顯示） -->
+        <!-- 超商：取貨門市（選7-11或全家時顯示） -->
         <div class="grid1" id="store-fields" style="display:none">
           <div class="field" id="f-store">
             <label>取貨門市名稱<span class="req">*</span></label>
             <input id="inp-store" type="text" placeholder="請填寫門市名稱，例：台北忠孝店">
             <span class="ferr">請填寫門市名稱</span>
           </div>
-          <div style="display:flex;gap:10px;margin-top:10px" id="store-links">
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap" id="store-links"></div>
+        </div>
+
+        <!-- 宅配：縣市 + 收件地址（選宅配時顯示） -->
+        <div id="addr-fields" style="display:none">
+          <div class="grid1" id="f-city-wrap">
+            <div class="field">
+              <label>縣市</label>
+              <select id="inp-city">
+                <option value="">請選擇</option>
+                <option>台北市</option><option>新北市</option><option>基隆市</option>
+                <option>桃園市</option><option>新竹市</option><option>新竹縣</option>
+                <option>苗栗縣</option><option>台中市</option><option>彰化縣</option>
+                <option>南投縣</option><option>雲林縣</option><option>嘉義市</option>
+                <option>嘉義縣</option><option>台南市</option><option>高雄市</option>
+                <option>屏東縣</option><option>宜蘭縣</option><option>花蓮縣</option>
+                <option>台東縣</option><option>澎湖縣</option><option>金門縣</option><option>連江縣</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid1">
+            <div class="field" id="f-addr">
+              <label>收件地址<span class="req">*</span></label>
+              <input id="inp-addr" type="text" placeholder="請填寫完整地址（路段、巷弄、門號）">
+              <span class="ferr">請填寫收件地址</span>
+            </div>
           </div>
         </div>
 
-        <!-- 宅配地址欄位（選宅配時顯示） -->
-        <div class="grid1" id="addr-fields">
-          <div class="field" id="f-addr">
-            <label>收件地址<span class="req">*</span></label>
-            <input id="inp-addr" type="text" placeholder="請填寫完整地址（路段、巷弄、門號）">
-            <span class="ferr">請填寫收件地址</span>
-          </div>
-        </div>
+        <!-- 備註 -->
         <div class="grid1">
           <div class="field">
             <label>備註</label>
@@ -814,10 +831,6 @@ function updateShipping(){
     }
   }
   if(addrFields) addrFields.style.display = isHome?'block':'none';
-  if(cityWrap){
-    cityWrap.style.display = isHome?'':'none';
-    // 初始隱藏縣市（只有宅配才需要）
-  }
 }
 
 // submit
@@ -1021,7 +1034,6 @@ buildCatFilters();
 renderProducts();
 updateFab();
 // 初始化配送欄位狀態
-if($('f-city-wrap')) $('f-city-wrap').style.display='none';
 if($('addr-fields')) $('addr-fields').style.display='none';
 if($('store-fields')) $('store-fields').style.display='none';
 </script>
