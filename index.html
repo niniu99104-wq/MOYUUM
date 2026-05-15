@@ -325,8 +325,8 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
         <!-- 姓名 -->
         <div class="grid1">
           <div class="field" id="f-name">
-            <label>姓名<span class="req">*</span></label>
-            <input id="inp-name" type="text" placeholder="王小明">
+            <label>姓名（填寫全名才能收件喔）<span class="req">*</span></label>
+            <input id="inp-name" type="text" placeholder="林宇豆">
             <span class="ferr">請填寫姓名</span>
           </div>
         </div>
@@ -334,7 +334,7 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
         <!-- 手機 -->
         <div class="grid1">
           <div class="field" id="f-phone">
-            <label>手機<span class="req">*</span></label>
+            <label>手機（填寫正確才能取貨喔）<span class="req">*</span></label>
             <input id="inp-phone" type="tel" placeholder="09xxxxxxxx">
             <span class="ferr">請填寫有效手機</span>
           </div>
@@ -776,8 +776,8 @@ function togglePayDetail(){
   const checked=document.querySelector('input[name=payMethod]:checked');
   if(checked) checked.closest('.pay-opt').classList.add('on');
   const val=checked?checked.value:'transfer';
-  $('bankBox').classList.toggle('show', val==='transfer');
-  $('remitField').style.display=val==='transfer'?'block':'none';
+  if($('bankBox')) $('bankBox').classList.toggle('show', val==='transfer');
+  if($('remitField')) $('remitField').style.display=val==='transfer'?'block':'none';
 }
 
 
@@ -808,6 +808,7 @@ function updateShipping(){
 
   if(storeFields){
     storeFields.style.display = isConvenience?'block':'none';
+    if(!isConvenience && !isHome){ storeFields.style.display='none'; }
     // 門市查詢連結
     const links=$('store-links');
     if(links){
@@ -833,6 +834,7 @@ function updateShipping(){
 
 // submit
 function handleSubmit(){
+  try {
   // validate
   let ok=true;
   const nickname=$('inp-nickname').value.trim();
@@ -900,6 +902,10 @@ function handleSubmit(){
   };
 
   showConfirm();
+  } catch(err) {
+    console.error('送出錯誤:', err);
+    showToast('送出時發生錯誤，請重試');
+  }
 }
 
 // ━━━━━━━━ CONFIRM ━━━━━━━━
@@ -968,7 +974,6 @@ function showConfirm(){
   if(o.payMethod==='transfer'){
     $('payStep').style.display='';
     $('orderStepNum').textContent='3';
-    document.querySelector('#pageConfirm .step-card:last-of-type .step-num').textContent='4';
     $('remitConfirmBox').innerHTML=`已記錄匯款帳號後五碼：<strong>${o.remit}</strong>，請確認金額 <strong>${fmt(o.total)}</strong> 後完成匯款`;
   } else {
     $('payStep').style.display='none';
