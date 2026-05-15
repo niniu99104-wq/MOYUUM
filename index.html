@@ -336,7 +336,7 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
             <label>LINE ID</label>
             <input id="inp-line" type="text" placeholder="選填">
           </div>
-          <div class="field">
+          <div class="field" id="f-city-wrap">
             <label>縣市</label>
             <select id="inp-city">
               <option value="">請選擇</option>
@@ -362,7 +362,20 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
             <span class="ferr">請選擇配送方式</span>
           </div>
         </div>
-        <div class="grid1">
+
+        <!-- 超商門市欄位（選7-11或全家時顯示） -->
+        <div class="grid1" id="store-fields" style="display:none">
+          <div class="field" id="f-store">
+            <label>取貨門市名稱<span class="req">*</span></label>
+            <input id="inp-store" type="text" placeholder="請填寫門市名稱，例：台北忠孝店">
+            <span class="ferr">請填寫門市名稱</span>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px" id="store-links">
+          </div>
+        </div>
+
+        <!-- 宅配地址欄位（選宅配時顯示） -->
+        <div class="grid1" id="addr-fields">
           <div class="field" id="f-addr">
             <label>收件地址<span class="req">*</span></label>
             <input id="inp-addr" type="text" placeholder="請填寫完整地址（路段、巷弄、門號）">
@@ -462,10 +475,9 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
       <div class="step-body">
         <div class="pay-step-box">
           <div class="pay-step-title">匯款資訊</div>
-          <div class="pay-bank-info">
-            <div><span class="pay-bk">銀行</span>＿＿銀行（＿＿＿）</div>
-            <div><span class="pay-bk">帳號</span>＿＿＿＿－＿＿＿＿＿＿＿</div>
-            <div><span class="pay-bk">戶名</span>＿＿＿</div>
+          <div class="pay-bank-info" id="confirmBankInfo">
+            <div><span class="pay-bk">銀行</span><span id="cbBank"></span></div>
+            <div><span class="pay-bk">帳號</span><span id="cbAccount"></span></div>
             <div><span class="pay-bk">金額</span><strong id="confirmAmt" style="color:var(--terra)">NT$0</strong></div>
           </div>
         </div>
@@ -525,7 +537,7 @@ const CONFIG = {
   bankAccount: '28881023351575',
   bankHolder: '',
   googleFormUrl: 'https://docs.google.com/forms/d/1YIZlIm0tpuU9DjmbJSpJcDVhRBhem9X1HsTLluL9bgA/viewform',
-  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzQkZIMVxUd4bbfCAUy8aAg2ikYAuol__me_zpMZiNrQIdRWm5JnsrdlXYyHawSDXwL/exec', // Apps Script URL
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbx005yFb3zIIi6l5wwa0J0KpzU4ZsCWzLHVYcxOSHp4lxEXVjluaMuRlPWw3xbbxzOd/exec', // Apps Script URL
 };
 
 // ━━━━━━━━ PRODUCTS ━━━━━━━━
@@ -769,6 +781,43 @@ function updateShipping(){
   if($('coSubtotal')) $('coSubtotal').textContent=fmt(subtotal);
   if($('coShipping')) $('coShipping').textContent=fee===0?'免運':'NT$'+fee;
   if($('coTotal')) $('coTotal').textContent=fmt(subtotal+fee);
+
+  // 切換門市 / 地址欄位
+  const ship=$('inp-shipping')?$('inp-shipping').value:'';
+  const isConvenience = ship==='711'||ship==='family';
+  const isHome = ship==='home';
+
+  const storeFields=$('store-fields');
+  const addrFields=$('addr-fields');
+  const cityWrap=$('f-city-wrap');
+
+  if(storeFields){
+    storeFields.style.display = isConvenience?'block':'none';
+    // 門市查詢連結
+    const links=$('store-links');
+    if(links){
+      if(ship==='711'){
+        links.innerHTML=`<a href="https://emap.pcsc.com.tw/" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--terra);background:var(--tag);padding:7px 14px;border-radius:10px;text-decoration:none;border:1px solid var(--blush);transition:all .2s"
+          onmouseover="this.style.background='var(--blush)'" onmouseout="this.style.background='var(--tag)'">
+          🏪 7-ELEVEN 門市查詢
+        </a>`;
+      } else if(ship==='family'){
+        links.innerHTML=`<a href="https://www.family.com.tw/Marketing/zh/Map" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--green);background:var(--green-light);padding:7px 14px;border-radius:10px;text-decoration:none;border:1px solid #c5ddc8;transition:all .2s"
+          onmouseover="this.style.background='#d4e9d6'" onmouseout="this.style.background='var(--green-light)'">
+          🏪 全家 門市查詢
+        </a>`;
+      } else {
+        links.innerHTML='';
+      }
+    }
+  }
+  if(addrFields) addrFields.style.display = isHome?'block':'none';
+  if(cityWrap){
+    cityWrap.style.display = isHome?'':'none';
+    // 初始隱藏縣市（只有宅配才需要）
+  }
 }
 
 // submit
@@ -783,9 +832,22 @@ $('submitBtn').addEventListener('click',()=>{
   const payMethod=document.querySelector('input[name=payMethod]:checked').value;
   const remit=$('inp-remit').value.trim();
 
-  [['f-nickname',nickname],['f-name',name],['f-phone',phone&&/^09\d{8}$/.test(phone)],['f-addr',addr],['f-shipping',shipping]].forEach(([id,v])=>{
+  const isConvenienceShip = shipping==='711'||shipping==='family';
+  const store=$('inp-store')?$('inp-store').value.trim():'';
+
+  // 基本必填
+  [['f-nickname',nickname],['f-name',name],['f-phone',phone&&/^09\d{8}$/.test(phone)],['f-shipping',shipping]].forEach(([id,v])=>{
     const f=$(id); f.classList.toggle('bad',!v); if(!v) ok=false;
   });
+
+  // 超商：驗門市名稱
+  if(isConvenienceShip){
+    const f=$('f-store'); if(f){ f.classList.toggle('bad',!store); if(!store) ok=false; }
+  }
+  // 宅配：驗地址
+  if(shipping==='home'){
+    const f=$('f-addr'); if(f){ f.classList.toggle('bad',!addr); if(!addr) ok=false; }
+  }
 
   if(payMethod==='transfer'){
     const remitOk=/^\d{5}$/.test(remit);
@@ -806,13 +868,15 @@ $('submitBtn').addEventListener('click',()=>{
 
   const shippingFee=calcShipping();
   const shipLabels={'711':'7-ELEVEN 超商取貨','family':'全家 超商取貨','home':'新竹物流 宅配'};
+  const isConvShip = shipping==='711'||shipping==='family';
   lastOrder={
     ref:'MYM-'+Date.now().toString(36).toUpperCase(),
     nickname,
     name, phone,
     line:$('inp-line').value.trim()||'—',
-    city:$('inp-city').value||'—',
-    addr,
+    city: isConvShip?'—':($('inp-city').value||'—'),
+    addr: isConvShip?('取貨門市：'+store):addr,
+    store: isConvShip?store:'—',
     note:$('inp-note').value.trim()||'—',
     shipping: shipLabels[shipping]||shipping,
     shippingFee,
@@ -837,6 +901,7 @@ function submitToSheet(order){
     line: order.line,
     city: order.city,
     addr: order.addr,
+    store: order.store,
     note: order.note,
     shipping: order.shipping,
     shippingFee: order.shippingFee,
@@ -856,17 +921,21 @@ function submitToSheet(order){
 
 function showConfirm(){
   const o=lastOrder;
-  // set google form link
-  $('gformLink').href=CONFIG.googleFormUrl;
-
   // info
+  const isConvOrder = o.store && o.store !== '—';
   $('confirmInfoBody').innerHTML=`
+    <div class="info-row"><span class="info-k">社群名稱</span><span class="info-v">${o.nickname}</span></div>
     <div class="info-row"><span class="info-k">姓名</span><span class="info-v">${o.name}</span></div>
     <div class="info-row"><span class="info-k">手機</span><span class="info-v">${o.phone}</span></div>
     <div class="info-row"><span class="info-k">LINE ID</span><span class="info-v">${o.line}</span></div>
-    <div class="info-row"><span class="info-k">地址</span><span class="info-v">${o.city} ${o.addr}</span></div>
+    <div class="info-row"><span class="info-k">配送</span><span class="info-v">${o.shipping}</span></div>
+    ${isConvOrder
+      ? `<div class="info-row"><span class="info-k">取貨門市</span><span class="info-v">${o.store}</span></div>`
+      : `<div class="info-row"><span class="info-k">地址</span><span class="info-v">${o.city} ${o.addr}</span></div>`
+    }
     <div class="info-row"><span class="info-k">備註</span><span class="info-v">${o.note}</span></div>
-    <div class="info-row"><span class="info-k">付款</span><span class="info-v">${o.payMethod==='transfer'?'ATM 匯款':'LINE Pay'}</span></div>
+    <div class="info-row"><span class="info-k">付款</span><span class="info-v">${o.payMethod==='transfer'?'ATM 匯款':'LINE Pay / iPASS'}</span></div>
+    <div class="info-row"><span class="info-k">運費</span><span class="info-v" style="color:var(--green)">${o.shippingFee===0?'免運':'NT$'+o.shippingFee}</span></div>
   `;
 
   // order items
@@ -882,6 +951,8 @@ function showConfirm(){
 
   // payment step
   $('confirmAmt').textContent=fmt(o.total);
+  if($('cbBank')) $('cbBank').textContent=CONFIG.bankName+'（'+CONFIG.bankCode+'）';
+  if($('cbAccount')) $('cbAccount').textContent=CONFIG.bankAccount;
   if(o.payMethod==='transfer'){
     $('payStep').style.display='';
     $('orderStepNum').textContent='3';
@@ -912,7 +983,7 @@ $('copyOrderBtn').addEventListener('click',()=>{
     `手機：${o.phone}`,
     `LINE：${o.line}`,
     `配送：${o.shipping}`,
-    `地址：${o.city} ${o.addr}`,
+    o.store&&o.store!=='—' ? `取貨門市：${o.store}` : `地址：${o.city} ${o.addr}`,
     `備註：${o.note}`,
     `付款：${o.payMethod==='transfer'?'ATM匯款':'LINE Pay / iPASS'}`,
     o.payMethod==='transfer'?`後五碼：${o.remit}`:'',
@@ -949,6 +1020,10 @@ loadCart();
 buildCatFilters();
 renderProducts();
 updateFab();
+// 初始化配送欄位狀態
+if($('f-city-wrap')) $('f-city-wrap').style.display='none';
+if($('addr-fields')) $('addr-fields').style.display='none';
+if($('store-fields')) $('store-fields').style.display='none';
 </script>
 </body>
 </html>
