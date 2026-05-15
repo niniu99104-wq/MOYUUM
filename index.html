@@ -227,8 +227,16 @@ body{font-family:'Noto Serif TC',serif;background:var(--cream);color:var(--ink);
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:480px){
-  .prod-view{display:none}
-  .prod-row{grid-template-columns:24px 1fr auto auto;gap:8px;padding:12px}
+  .prod-row{grid-template-columns:1fr auto;gap:6px;padding:10px 12px}
+  .prod-no{display:none}
+  .prod-name{font-size:12px}
+  .prod-view{font-size:10px;padding:3px 8px}
+  .prod-price{min-width:48px;font-size:12px}
+  .prod-add{width:28px;height:28px;font-size:16px}
+  .prod-row .prod-name{grid-column:1;grid-row:1}
+  .prod-row .prod-view{grid-column:1;grid-row:2;justify-self:start}
+  .prod-row .prod-price{grid-column:2;grid-row:1;align-self:center}
+  .prod-row .prod-add{grid-column:2;grid-row:2;align-self:center;justify-self:end}
   .grid2{grid-template-columns:1fr;gap:16px}
   .shop-header{padding-top:32px}
 }
