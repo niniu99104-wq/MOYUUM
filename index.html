@@ -779,9 +779,7 @@ function togglePayDetail(){
   $('bankBox').classList.toggle('show', val==='transfer');
   $('remitField').style.display=val==='transfer'?'block':'none';
 }
-document.querySelectorAll('.pay-opt').forEach(opt=>{
-  opt.addEventListener('click',()=>togglePayDetail());
-});
+
 
 // 運費計算
 function calcShipping(){
@@ -834,7 +832,7 @@ function updateShipping(){
 }
 
 // submit
-$('submitBtn').addEventListener('click',()=>{
+function handleSubmit(){
   // validate
   let ok=true;
   const nickname=$('inp-nickname').value.trim();
@@ -842,7 +840,8 @@ $('submitBtn').addEventListener('click',()=>{
   const phone=$('inp-phone').value.trim();
   const addr=$('inp-addr').value.trim();
   const shipping=$('inp-shipping').value;
-  const payMethod=document.querySelector('input[name=payMethod]:checked').value;
+  const payMethodEl=document.querySelector('input[name=payMethod]:checked');
+  const payMethod=payMethodEl?payMethodEl.value:'transfer';
   const remit=$('inp-remit').value.trim();
 
   const isConvenienceShip = shipping==='711'||shipping==='family';
@@ -901,7 +900,7 @@ $('submitBtn').addEventListener('click',()=>{
   };
 
   showConfirm();
-});
+}
 
 // ━━━━━━━━ CONFIRM ━━━━━━━━
 function submitToSheet(order){
@@ -1020,22 +1019,33 @@ $('copyOrderBtn').addEventListener('click',()=>{
     });
 });
 
-$('shopAgainBtn').addEventListener('click',()=>showPage('pageShop'));
-$('backToShop').addEventListener('click',()=>showPage('pageShop'));
-$('cartFab').addEventListener('click',openDrawer);
-$('closeDrawer').addEventListener('click',closeDrawer);
-$('drawerBg').addEventListener('click',closeDrawer);
-$('goCheckout').addEventListener('click',openCheckout);
-$('searchInput').addEventListener('input',e=>{searchQ=e.target.value.trim();renderProducts();});
-
 // init
-loadCart();
-buildCatFilters();
-renderProducts();
-updateFab();
-// 初始化配送欄位狀態
-if($('addr-fields')) $('addr-fields').style.display='none';
-if($('store-fields')) $('store-fields').style.display='none';
+document.addEventListener('DOMContentLoaded', ()=>{
+  $('shopAgainBtn').addEventListener('click',()=>showPage('pageShop'));
+  $('backToShop').addEventListener('click',()=>showPage('pageShop'));
+  $('cartFab').addEventListener('click',openDrawer);
+  $('closeDrawer').addEventListener('click',closeDrawer);
+  $('drawerBg').addEventListener('click',closeDrawer);
+  $('goCheckout').addEventListener('click',openCheckout);
+  $('searchInput').addEventListener('input',e=>{searchQ=e.target.value.trim();renderProducts();});
+
+  // pay-opt 綁定
+  document.querySelectorAll('.pay-opt').forEach(opt=>{
+    opt.addEventListener('click',()=>togglePayDetail());
+  });
+
+  // submit
+  $('submitBtn').addEventListener('click', handleSubmit);
+
+  // 初始化
+  loadCart();
+  buildCatFilters();
+  renderProducts();
+  updateFab();
+  if($('addr-fields')) $('addr-fields').style.display='none';
+  if($('store-fields')) $('store-fields').style.display='none';
+  togglePayDetail(); // 初始化付款顯示
+});
 </script>
 </body>
 </html>
